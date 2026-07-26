@@ -1,4 +1,3 @@
-// firebase-messaging-sw.js
 importScripts('https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/9.22.2/firebase-messaging-compat.js');
 
@@ -19,7 +18,7 @@ messaging.onBackgroundMessage(function(payload) {
     const notificationTitle = payload.notification.title;
     const notificationOptions = {
         body: payload.notification.body,
-        icon: '/icon.png' // دەتوانیت وێنەی لۆگۆکەت لێرە دابنێیت لە داهاتوودا
+        icon: 'https://i.postimg.cc/L6pB6FNq/images-(83)-(1).png'
     };
     self.registration.showNotification(notificationTitle, notificationOptions);
 });
