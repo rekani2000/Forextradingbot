@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LiveZon Terminal - Quantitative Analysis</title>
+    <title>LiveZon</title>
+    
+    <link rel="icon" href="https://i.postimg.cc/L6pB6FNq/images-(83)-(1).png">
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/L6pB6FNq/images-(83)-(1).png">
+    <link rel="manifest" href="manifest.json">
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -42,7 +46,6 @@
 
         #app-screen { display: none; width: 100%; max-width: 1250px; }
         .dashboard { background: #1e293b; padding: 25px; border-radius: 12px; box-shadow: 0 10px 35px rgba(0,0,0,0.7); width: 100%; border: 1px solid #3b82f6; }
-        h2 { margin-top: 0; color: #38bdf8; text-align: center; font-size: 24px; margin-bottom: 25px;}
         
         .user-profile-box { background: rgba(15, 23, 42, 0.6); border: 1px solid #334155; border-radius: 8px; padding: 15px; margin-bottom: 25px; display: flex; flex-direction: column; gap: 10px; }
         .profile-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 5px;}
@@ -80,12 +83,17 @@
 <body oncontextmenu="return false;">
 
     <div id="login-screen">
-        <h2 style="font-size: 32px; margin-bottom: 5px;">LiveZon Terminal</h2>
+        <img src="https://i.postimg.cc/L6pB6FNq/images-(83)-(1).png" alt="LiveZon" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+        <h2 style="font-size: 32px; margin-bottom: 5px;">LiveZon</h2>
         <p style="color: #94a3b8; margin-bottom: 20px;">سەکۆی شیکاریی ئەلگۆریتمیی پێشکەوتوو</p>
         
         <div class="disclaimer-box">
             <strong>⚠️ ئاگاداری گرنگ:</strong><br>
-            ئەم سیستەمە تەنها ئامرازێکی شیکاریی کوانتیتاتیڤە (Quantitative) و بە هیچ شێوەیەک ئامۆژگاریی دارایی ڕاستەوخۆ نییە. بازاڕی دارایی مەترسی لەدەستدانی سەرمایەی تێدایە، و بەکارهێنەر خۆی بە تەواوی بەرپرسیارە لە هەر بڕیارێکی کڕین یان فرۆشتن.
+            ئەم سیستەمە تەنها ئامرازێکی شیکاریی کوانتیتاتیڤە (Quantitative) و بە هیچ شێوەیەک ئامۆژگاریی دارایی ڕاستەوخۆ نییە. بازاڕی دارایی مەترسی لەدەستدانی سەرمایەی تێدایە، و بەکارهێنەر خۆی بە تەواوی بەرپرسیارە لە هەر بڕیارێکی کڕین یان فرۆشتن.<br><br>
+            
+            <strong style="color: #38bdf8;">🔒 سیستەمی ئامێرەکان:</strong><br>
+            هەر ئەکاونتێک دەتوانی لە سەر یەک ئامێر پەیوەست بکەی. گەر بە نیازی گۆڕینەوەی ئامێری، پەیوەندی بە بەڕێوەبەرەکە بکە لە ڕێگەی تێلیگرام: 
+            <a href="https://t.me/ibrahimhneshi" target="_blank" style="color: #4ade80; text-decoration: none; font-weight: bold; display: inline-block; margin-top: 5px;">@ibrahimhneshi</a>
         </div>
 
         <div class="login-box">
@@ -111,7 +119,10 @@
                 <div class="info-row"><span>ماوەی ئابوونەی ماوە:</span> <b id="prof-left" style="color:#4ade80;"></b></div>
             </div>
 
-            <h2>⚡ LiveZon Terminal - Strict Algorithm</h2>
+            <h2 style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 0; color: #38bdf8; font-size: 24px; margin-bottom: 25px;">
+                <img src="https://i.postimg.cc/L6pB6FNq/images-(83)-(1).png" alt="LiveZon" style="width: 40px; height: 40px; border-radius: 50%;">
+                ⚡ LiveZon - Strict Algorithm
+            </h2>
             
             <div class="layout-grid">
                 <div class="chart-section">
@@ -225,13 +236,10 @@
             } catch (e) {}
         }
 
-        // داواکردنی مۆڵەتی نۆتیفیکەیشن و وەرگرتنی تۆکن
         async function requestNotificationPermission(email) {
             try {
                 const permission = await Notification.requestPermission();
                 if (permission === 'granted') {
-                    // تێبینی: بۆ بەکارخستنی نۆتیفیکەیشن، دەبێت VAPID Key لێرە دابنێیت کە لە فایەربەیس دەری دەهێنیت
-                    // const token = await messaging.getToken({ vapidKey: 'YOUR_VAPID_KEY_HERE' });
                     const token = await messaging.getToken();
                     if (token) {
                         await db.collection("subscriptions").doc(email.toLowerCase()).update({ fcmToken: token });
@@ -278,7 +286,6 @@
                         }
                     }
 
-                    // لۆگینی سەرکەوتوو
                     document.getElementById('prof-email').innerText = email;
                     let planName = data.plan;
                     if(planName === "Lifetime") planName = "هەمیشەیی";
@@ -303,8 +310,6 @@
                     document.getElementById('login-screen').style.display = 'none';
                     document.getElementById('app-screen').style.display = 'block';
                     updateChart(); 
-                    
-                    // چالاککردنی نۆتیفیکەیشن دوای چوونەژوورەوە
                     requestNotificationPermission(email);
                 } else {
                     msgBox.innerText = "ئەم هەژمارە لە بنکەدراوەدا بوونی نییە.";
