@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LiveZon</title>
+    <title>euro forex trading</title>
     
     <link rel="icon" href="https://i.postimg.cc/L6pB6FNq/images-(83)-(1).png">
     <link rel="apple-touch-icon" href="https://i.postimg.cc/L6pB6FNq/images-(83)-(1).png">
@@ -83,9 +83,9 @@
 <body oncontextmenu="return false;">
 
     <div id="login-screen">
-        <img src="https://i.postimg.cc/L6pB6FNq/images-(83)-(1).png" alt="LiveZon" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
-        <h2 style="font-size: 32px; margin-bottom: 5px;">LiveZon</h2>
-        <p style="color: #94a3b8; margin-bottom: 20px;">سەکۆی شیکاریی ئەلگۆریتمیی پێشکەوتوو</p>
+        <img src="https://i.postimg.cc/L6pB6FNq/images-(83)-(1).png" alt="euro forex trading" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+        <h2 style="font-size: 32px; margin-bottom: 5px;">euro forex trading</h2>
+        <p style="color: #94a3b8; margin-bottom: 20px;">سەکۆی شیکاریی ئەلگۆریتمیی زیرەک</p>
         
         <div class="disclaimer-box">
             <strong>⚠️ ئاگاداری گرنگ:</strong><br>
@@ -120,8 +120,8 @@
             </div>
 
             <h2 style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 0; color: #38bdf8; font-size: 24px; margin-bottom: 25px;">
-                <img src="https://i.postimg.cc/L6pB6FNq/images-(83)-(1).png" alt="LiveZon" style="width: 40px; height: 40px; border-radius: 50%;">
-                ⚡ LiveZon - Strict Algorithm
+                <img src="https://i.postimg.cc/L6pB6FNq/images-(83)-(1).png" alt="euro forex trading" style="width: 40px; height: 40px; border-radius: 50%;">
+                ⚡ euro forex trading - Smart Engine
             </h2>
             
             <div class="layout-grid">
@@ -360,7 +360,7 @@
                 autoRefreshInterval = setInterval(analyzeMarket, 60000); 
                 isAutoActive = true;
                 btn.className = "btn-auto active"; btn.innerHTML = "وەستاندنی ئەلگۆریتم ⏹️";
-                status.innerHTML = "شیکاری ئۆتۆماتیکی: چالاکە 🟢 (زۆر توند)";
+                status.innerHTML = "شیکاری ئۆتۆماتیکی: چالاکە 🟢 (زیرەک و خێرا)";
                 playAlarm();
             }
         }
@@ -428,7 +428,7 @@
             try {
                 const response = await fetch(API_URL);
                 const data = await response.json();
-                const signal = calculateUltraStrictSystem(data, digits);
+                const signal = calculateSmartSystem(data, digits);
                 displayResult(signal, timeframe, assetName, digits);
             } catch (error) {
                 resultDiv.innerHTML = "⚠️ هەڵە لە وەرگرتنی داتا. هێڵی ئینتەرنێتەکەت بپشکنە.";
@@ -436,7 +436,8 @@
             }
         }
 
-        function calculateUltraStrictSystem(candles, digits) {
+        // --- ئەلگۆریتمی نوێی زیرەک و هاوسەنگ ---
+        function calculateSmartSystem(candles, digits) {
             const closedCandles = candles.slice(0, candles.length - 1);
             
             const rsiValue = calculateRSI(closedCandles, 14);
@@ -459,52 +460,62 @@
             const cLowerWick = Math.min(cOpen, cClose) - cLow;
             const cTotalSize = cHigh - cLow;
 
-            if (cTotalSize > atr * 3.5) return { type: 'NEUTRAL', msg: "جوڵەی لەناکاو و نائاسایی (مەترسیدارە)." };
+            if (cTotalSize > atr * 3.5) return { type: 'NEUTRAL', msg: "جوڵەی نائاسایی بازاڕ (سەلامەت نییە)." };
 
             let patternFound = null; let rawSignalType = null; let confidence = 0;
 
-            if (cLowerWick >= (cBodySize * 3) && cUpperWick <= cBodySize) { 
-                patternFound = "پین باری زۆر بەهێزی ئەرێنی"; rawSignalType = 'BUY'; confidence += 40; 
+            // ١. مەرجی پین بار (نەرمتر کراوە بۆ ٢ هێندەی جەستە لە جیاتی ٣)
+            if (cLowerWick >= (cBodySize * 2) && cUpperWick <= cBodySize) { 
+                patternFound = "پین باری ئەرێنی"; rawSignalType = 'BUY'; confidence += 35; 
             }
-            else if (cUpperWick >= (cBodySize * 3) && cLowerWick <= cBodySize) { 
-                patternFound = "پین باری زۆر بەهێزی نەرێنی"; rawSignalType = 'SELL'; confidence += 40; 
+            else if (cUpperWick >= (cBodySize * 2) && cLowerWick <= cBodySize) { 
+                patternFound = "پین باری نەرێنی"; rawSignalType = 'SELL'; confidence += 35; 
             }
-            else if (cClose > pHigh && cOpen <= pLow && cClose > cOpen) { 
-                patternFound = "قووتدەری تەواوەتی ئەرێنی"; rawSignalType = 'BUY'; confidence += 40; 
+            // ٢. مەرجی قووتدەر (Engulfing - مەرجی ئاسایی و گونجاوتر)
+            else if (pClose < pOpen && cClose > pOpen && cOpen < pClose) { 
+                patternFound = "قووتدەری ئەرێنی"; rawSignalType = 'BUY'; confidence += 35; 
             }
-            else if (cClose < pLow && cOpen >= pHigh && cClose < cOpen) { 
-                patternFound = "قووتدەری تەواوەتی نەرێنی"; rawSignalType = 'SELL'; confidence += 40; 
+            else if (pClose > pOpen && cClose < pOpen && cOpen > pClose) { 
+                patternFound = "قووتدەری نەرێنی"; rawSignalType = 'SELL'; confidence += 35; 
+            }
+            // ٣. ئاماژەی نوێ: تەقینەوەی مۆمێنتوم (Momentum Breakout)
+            else if (cBodySize > atr * 1.2 && cClose > sma20 && cOpen < sma20) {
+                patternFound = "بڕینی بەهێزی بەرەو سەرەوە"; rawSignalType = 'BUY'; confidence += 30;
+            }
+            else if (cBodySize > atr * 1.2 && cClose < sma20 && cOpen > sma20) {
+                patternFound = "بڕینی بەهێزی بەرەو خوارەوە"; rawSignalType = 'SELL'; confidence += 30;
             }
 
-            if (!patternFound) return { type: 'NEUTRAL', msg: "بازاڕ لە بێدەنگیدایە. هیچ هەلێکی %٨٥ نابینرێت." };
+            if (!patternFound) return { type: 'NEUTRAL', msg: "هیچ ئاماژەیەکی گونجاو لە چارتەکەدا بەدی ناکرێت." };
 
             let details = [patternFound];
 
             if (rawSignalType === 'BUY' && isMacroUptrend && cClose > sma20) { 
-                confidence += 30; details.push("هاوڕێی ئاراستەی گەورەیە (SMA 20 & 50)"); 
+                confidence += 25; details.push("هاوڕێی ئاراستەی گەورەیە"); 
             }
             else if (rawSignalType === 'SELL' && !isMacroUptrend && cClose < sma20) { 
-                confidence += 30; details.push("دژی شەپۆلە گەورەکە نییە"); 
+                confidence += 25; details.push("هاوڕێی ئاراستەی گەورەیە"); 
             }
 
-            if (rawSignalType === 'BUY' && cLow <= bb.lower + (atr * 0.5)) { 
-                confidence += 20; details.push("لە ناوچەی پاڵپشتییە (BB)"); 
+            if (rawSignalType === 'BUY' && cLow <= bb.lower + atr) { 
+                confidence += 20; details.push("پاڵپشتی باش"); 
             }
-            else if (rawSignalType === 'SELL' && cHigh >= bb.upper - (atr * 0.5)) { 
-                confidence += 20; details.push("لە ناوچەی بەرگرییە (BB)"); 
+            else if (rawSignalType === 'SELL' && cHigh >= bb.upper - atr) { 
+                confidence += 20; details.push("بەرگری باش"); 
             }
 
-            if (rawSignalType === 'BUY' && rsiValue < 60 && rsiValue > 25) confidence += 10;
-            else if (rawSignalType === 'SELL' && rsiValue > 40 && rsiValue < 75) confidence += 10;
+            if (rawSignalType === 'BUY' && rsiValue < 65 && rsiValue > 25) confidence += 10;
+            else if (rawSignalType === 'SELL' && rsiValue > 35 && rsiValue < 75) confidence += 10;
 
             let stopLoss = rawSignalType === 'BUY' ? cClose - (atr * 1.5) : cClose + (atr * 1.5);
             let takeProfit = rawSignalType === 'BUY' ? cClose + (atr * 2.0) : cClose - (atr * 2.0);
 
-            if (confidence >= 85) {
+            // نزمکردنەوەی ئاستی وەرگرتن بۆ ٨٠٪ بۆ زامنکردنی ئاماژەی زیاتر
+            if (confidence >= 80) {
                 return { type: rawSignalType, time: currentCandleTime, price: cClose.toFixed(digits), confidence: confidence, msg: details.join(" + "), sl: stopLoss.toFixed(digits), tp: takeProfit.toFixed(digits) };
             }
             
-            return { type: 'NEUTRAL', msg: `مەرجەکان شکستیان هێنا لە گەیشتن بە %٨٥ (ڕێژەی ئێستا: %${confidence}). سەرمایەکەت بپارێزە.` };
+            return { type: 'NEUTRAL', msg: `مەرجەکان نەگەیشتنە ئاستی پێویست (%${confidence}).` };
         }
 
         function displayResult(signal, timeframe, assetName, digits) {
@@ -524,7 +535,7 @@
 
             let className = signal.type === 'BUY' ? "result-card buy" : "result-card sell";
             let barColor = signal.type === 'BUY' ? "#22c55e" : "#ef4444";
-            let header = signal.type === 'BUY' ? "🟢 هەلی زێڕینی کڕین (BUY)" : "🔴 هەلی زێڕینی فرۆشتن (SELL)";
+            let header = signal.type === 'BUY' ? "🟢 هەلی کڕین (BUY)" : "🔴 هەلی فرۆشتن (SELL)";
 
             resultDiv.className = className;
             resultDiv.innerHTML = `
@@ -535,9 +546,9 @@
                     <div class="target-row"><span>ئامانجی قازانج:</span> <span style="color: #4ade80; font-weight: bold;">${signal.tp}</span></div>
                     <div class="target-row"><span>وەستانی زیان:</span> <span style="color: #f87171; font-weight: bold;">${signal.sl}</span></div>
                 </div>
-                <div style="margin-top: 15px; font-size: 13px;">ڕێژەی متمانە (Ultra Strict): <b>%${signal.confidence}</b></div>
+                <div style="margin-top: 15px; font-size: 13px;">ڕێژەی متمانە: <b>%${signal.confidence}</b></div>
                 <div class="confidence-container"><div class="confidence-bar" style="width: ${signal.confidence}%; background-color: ${barColor};"></div></div>
-                <div style="margin-top: 15px; font-size: 12px; color: #cbd5e1; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px;"><b>پشکنینی ئەلگۆریتم:</b> ${signal.msg}</div>
+                <div style="margin-top: 15px; font-size: 12px; color: #cbd5e1; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px;"><b>پشکنین:</b> ${signal.msg}</div>
             `;
         }
     </script>
