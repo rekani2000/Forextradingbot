@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>euro forex trading - Smart Money Engine</title>
+    <title>euro forex trading - HFT Quant Engine</title>
     
     <link rel="icon" href="https://i.postimg.cc/L6pB6FNq/images-(83)-(1).png">
     <link rel="apple-touch-icon" href="https://i.postimg.cc/L6pB6FNq/images-(83)-(1).png">
@@ -85,7 +85,7 @@
     <div id="login-screen">
         <img src="https://i.postimg.cc/L6pB6FNq/images-(83)-(1).png" alt="euro forex trading" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
         <h2 style="font-size: 32px; margin-bottom: 5px;">euro forex trading</h2>
-        <p style="color: #94a3b8; margin-bottom: 20px;">سەکۆی شیکاریی ئەلگۆریتمیی پێشکەوتوو (SMC Engine)</p>
+        <p style="color: #94a3b8; margin-bottom: 20px;">سەکۆی شیکاریی ئەلگۆریتمیی پێشکەوتوو</p>
         
         <div class="disclaimer-box">
             <strong>⚠️ ئاگاداری گرنگ:</strong><br>
@@ -121,7 +121,7 @@
 
             <h2 style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 0; color: #38bdf8; font-size: 24px; margin-bottom: 25px;">
                 <img src="https://i.postimg.cc/L6pB6FNq/images-(83)-(1).png" alt="euro forex trading" style="width: 40px; height: 40px; border-radius: 50%;">
-                ⚡ euro forex trading - SMC & Quant
+                ⚡ euro forex trading - High Frequency Engine
             </h2>
             
             <div class="layout-grid">
@@ -135,7 +135,7 @@
                     <div class="form-group">
                         <label>جۆری بازاڕ (Asset):</label>
                         <select id="assetSelect" onchange="updateChart()">
-                            <optgroup label="شیکاری ئاستی دامەزراوەیی (SMC)">
+                            <optgroup label="پشتگیریکراو بە ئەلگۆریتمی HFT">
                                 <option value="EURUSDT" data-tv="FX:EURUSD" data-name="EUR/USD" data-digits="5">یۆرۆ / دۆلار (EUR/USD)</option>
                                 <option value="PAXGUSDT" data-tv="OANDA:XAUUSD" data-name="زێڕ (Gold)" data-digits="2">زێڕ (Gold - XAU/USD)</option>
                             </optgroup>
@@ -157,16 +157,16 @@
                     <div class="form-group">
                         <label>چوارچێوەی کات:</label>
                         <select id="timeframeSelect" onchange="updateChart()">
-                            <option value="1m" data-tv="1">١ خولەک (Scalping)</option>
-                            <option value="5m" data-tv="5">٥ خولەک (Short-Term)</option>
-                            <option value="15m" data-tv="15" selected>١٥ خولەک (Day Trading)</option>
+                            <option value="1m" data-tv="1">١ خولەک (Scalping خێرا)</option>
+                            <option value="5m" data-tv="5" selected>٥ خولەک (Day Trading)</option>
+                            <option value="15m" data-tv="15">١٥ خولەک (شەپۆلی مامناوەند)</option>
                             <option value="1h" data-tv="60">١ کاتژمێر (Swing)</option>
                         </select>
                     </div>
                     
                     <div class="controls">
                         <button onclick="analyzeMarket()">پشکنین 🔄</button>
-                        <button id="autoBtn" class="btn-auto" onclick="toggleAutoRefresh()">خستنەگەڕی سیستەم ▶️</button>
+                        <button id="autoBtn" class="btn-auto" onclick="toggleAutoRefresh()">خستنەگەڕی بزوێنەر ▶️</button>
                     </div>
                     <div id="result" class="result-card"></div>
                 </div>
@@ -174,6 +174,7 @@
         </div>
     </div>
 
+    <!-- دیبەگەری دژە-دزین -->
     <script>
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.onkeydown = function(e) {
@@ -352,19 +353,20 @@
             
             if (isAutoActive) {
                 clearInterval(autoRefreshInterval); isAutoActive = false;
-                btn.className = "btn-auto"; btn.innerHTML = "خستنەگەڕی سیستەم ▶️";
+                btn.className = "btn-auto"; btn.innerHTML = "خستنەگەڕی بزوێنەر ▶️";
                 status.innerHTML = "شیکاری ئۆتۆماتیکی: ناچالاکە ⏸️";
             } else {
                 analyzeMarket(); 
-                autoRefreshInterval = setInterval(analyzeMarket, 60000); 
+                // بۆ فرێکوێنسی زیاتر، لێرە پشکنینەکان خێراتر کراون بۆ هەموو ٤٥ چرکەیەک
+                autoRefreshInterval = setInterval(analyzeMarket, 45000); 
                 isAutoActive = true;
-                btn.className = "btn-auto active"; btn.innerHTML = "وەستاندنی سیستەم ⏹️";
-                status.innerHTML = "شیکاری ئۆتۆماتیکی: چالاکە 🟢 (SMC & Quant)";
+                btn.className = "btn-auto active"; btn.innerHTML = "وەستاندنی بزوێنەر ⏹️";
+                status.innerHTML = "شیکاری ئۆتۆماتیکی: چالاکە 🟢 (High-Frequency Mode)";
                 playAlarm();
             }
         }
 
-        /* --- Institutional Math Core --- */
+        /* --- Advanced Math For High Frequency --- */
         function calculateEMA(closes, period) {
             let k = 2 / (period + 1);
             let emaArray = [closes[0]];
@@ -374,28 +376,25 @@
             return emaArray[emaArray.length - 1];
         }
 
-        function calculateMACD(closes) {
-            let ema12 = calculateEMA(closes, 12);
-            let ema26 = calculateEMA(closes, 26);
-            return ema12 - ema26;
-        }
-
-        function calculateRSI(closes, period = 14) {
-            let gains = 0, losses = 0;
-            for (let i = 1; i <= period; i++) {
-                let change = closes[i] - closes[i-1];
-                if (change > 0) gains += change; else losses -= change;
+        function calculateStochastic(candles, period = 14, smoothK = 3) {
+            let stochArray = [];
+            for (let i = period - 1; i < candles.length; i++) {
+                let slice = candles.slice(i - period + 1, i + 1);
+                let highestHigh = Math.max(...slice.map(c => parseFloat(c[2])));
+                let lowestLow = Math.min(...slice.map(c => parseFloat(c[3])));
+                let currentClose = parseFloat(candles[i][4]);
+                
+                let k = ((currentClose - lowestLow) / (highestHigh - lowestLow)) * 100;
+                stochArray.push(isNaN(k) ? 50 : k);
             }
-            let avgGain = gains / period; let avgLoss = losses / period;
-            for (let i = period + 1; i < closes.length; i++) {
-                let change = closes[i] - closes[i-1];
-                let currentGain = change > 0 ? change : 0;
-                let currentLoss = change < 0 ? -change : 0;
-                avgGain = ((avgGain * (period - 1)) + currentGain) / period;
-                avgLoss = ((avgLoss * (period - 1)) + currentLoss) / period;
+            // Smoothing for D line
+            let dArray = [];
+            for(let i = smoothK - 1; i < stochArray.length; i++) {
+                let sum = 0;
+                for(let j = 0; j < smoothK; j++) sum += stochArray[i - j];
+                dArray.push(sum / smoothK);
             }
-            if (avgLoss === 0) return 100;
-            return parseFloat((100 - (100 / (1 + (avgGain / avgLoss)))).toFixed(2));
+            return { k: stochArray[stochArray.length - 1], d: dArray[dArray.length - 1] };
         }
 
         function calculateATR(candles, period = 14) {
@@ -408,11 +407,6 @@
                 trArray.push(tr);
             }
             return trArray.reduce((a, b) => a + b, 0) / period;
-        }
-
-        function calculateAverageVolume(candles, period = 20) {
-            let vols = candles.slice(-period).map(c => parseFloat(c[5]));
-            return vols.reduce((a, b) => a + b, 0) / period;
         }
 
         async function analyzeMarket() {
@@ -435,7 +429,7 @@
             try {
                 const response = await fetch(API_URL);
                 const data = await response.json();
-                const signal = calculateInstitutionalEngine(data, digits);
+                const signal = calculateHighFrequencyEngine(data, digits);
                 displayResult(signal, timeframe, assetName, digits);
             } catch (error) {
                 resultDiv.innerHTML = "⚠️ هەڵە لە وەرگرتنی داتا. هێڵی ئینتەرنێتەکەت بپشکنە.";
@@ -443,73 +437,71 @@
             }
         }
 
-        // --- Institutional SMC & Quant Engine ---
-        function calculateInstitutionalEngine(candles, digits) {
+        // --- بزوێنەری خێرا و ورد بۆ دۆزینەوەی زۆرترین ئاماژە ---
+        function calculateHighFrequencyEngine(candles, digits) {
             const closedCandles = candles.slice(0, candles.length - 1);
             const closes = closedCandles.map(c => parseFloat(c[4]));
             
-            const rsiValue = calculateRSI(closes, 14);
             const atr = calculateATR(closedCandles, 14);
-            const avgVol = calculateAverageVolume(closedCandles, 20);
+            const stoch = calculateStochastic(closedCandles, 14, 3);
             
+            // فلتەری زێڕین: ڕێگری لە %٥٠ ی هەڵەکان دەکات
             const ema50 = calculateEMA(closes, 50);
             const ema200 = calculateEMA(closes, 200);
-            const isMacroUptrend = ema50 > ema200; // زانینی ئاراستەی سەرمایە گەورەکان
+            const isUptrend = closes[closes.length - 1] > ema200 && ema50 > ema200;
+            const isDowntrend = closes[closes.length - 1] < ema200 && ema50 < ema200;
             
             const currentCandle = closedCandles[closedCandles.length - 1];
             const prevCandle = closedCandles[closedCandles.length - 2];
-            const prevPrevCandle = closedCandles[closedCandles.length - 3];
             
-            const cOpen = parseFloat(currentCandle[1]), cHigh = parseFloat(currentCandle[2]), cLow = parseFloat(currentCandle[3]), cClose = parseFloat(currentCandle[4]), cVol = parseFloat(currentCandle[5]);
-            const pHigh = parseFloat(prevCandle[2]), pLow = parseFloat(prevCandle[3]);
-            const ppHigh = parseFloat(prevPrevCandle[2]), ppLow = parseFloat(prevPrevCandle[3]);
-            
-            const cBodySize = Math.abs(cOpen - cClose);
+            const cOpen = parseFloat(currentCandle[1]), cHigh = parseFloat(currentCandle[2]), cLow = parseFloat(currentCandle[3]), cClose = parseFloat(currentCandle[4]);
+            const pOpen = parseFloat(prevCandle[1]), pClose = parseFloat(prevCandle[4]);
             const currentCandleTime = currentCandle[0];
 
-            let patternFound = null; let rawSignalType = null; let confidence = 0; let details = [];
+            let rawSignalType = null; let confidence = 0; let details = [];
 
-            // 1. گەڕان بەدوای بۆشایی نرخی نادادپەروەرانە (FVG - Fair Value Gap)
-            if (cLow > ppHigh && cClose > cOpen) {
-                patternFound = "بۆشایی پارەی زیرەک ئەرێنی (Bullish FVG)"; rawSignalType = 'BUY'; confidence += 40;
-            } else if (cHigh < ppLow && cClose < cOpen) {
-                patternFound = "بۆشایی پارەی زیرەک نەرێنی (Bearish FVG)"; rawSignalType = 'SELL'; confidence += 40;
+            // مەرجی سەرەکی بۆ ئاماژەی زۆر: تێکەڵەی ئاراستە (EMA) و هیلاکبوون (Stochastic)
+            if (isUptrend && stoch.k < 25 && cClose > cOpen) {
+                rawSignalType = 'BUY'; 
+                confidence += 45; 
+                details.push("پاشەکشەی کاتی لە ئاراستەی سەرەوە (Buy the Dip)");
             } 
-            // 2. هێزی قەبارە (Volume Surge) لەگەڵ مۆمێنتوم
-            else if (cVol > (avgVol * 1.5) && cBodySize > (atr * 1.2)) {
-                if (cClose > cOpen) { patternFound = "تەقینەوەی قەبارەی بانکی (Bullish Surge)"; rawSignalType = 'BUY'; confidence += 35; }
-                else { patternFound = "تەقینەوەی قەبارەی بانکی (Bearish Surge)"; rawSignalType = 'SELL'; confidence += 35; }
+            else if (isDowntrend && stoch.k > 75 && cClose < cOpen) {
+                rawSignalType = 'SELL'; 
+                confidence += 45; 
+                details.push("بەرزبوونەوەی کاتی لە ئاراستەی خوارەوە (Sell the Rally)");
+            }
+            // یەدەگ: مۆمەکانی قووتدەر لەسەر هێڵی ٥٠
+            else if (isUptrend && pClose < pOpen && cClose > pOpen && cOpen < pClose && cLow <= ema50) {
+                rawSignalType = 'BUY'; 
+                confidence += 40; 
+                details.push("بەرکەوتن بە هێڵی قورس (EMA 50 Bounce)");
+            }
+            else if (isDowntrend && pClose > pOpen && cClose < pOpen && cOpen > pClose && cHigh >= ema50) {
+                rawSignalType = 'SELL'; 
+                confidence += 40; 
+                details.push("گەڕانەوە لە هێڵی قورس (EMA 50 Rejection)");
             }
 
-            if (!patternFound) return { type: 'NEUTRAL', msg: "هیچ نەخشەیەکی Institutional SMC بەدی ناکرێت. سەرمایەکەت مەخە مەترسییەوە." };
-            details.push(patternFound);
+            if (!rawSignalType) return { type: 'NEUTRAL', msg: "هیچ دەرفەتێکی ڕوون لەم چرکەیەدا نییە. چاوەڕوانی تێکەڵبوونی هێڵەکانین." };
 
-            // 3. فلتەری ئاراستەی گەورە (EMA 50 & 200)
-            if (rawSignalType === 'BUY' && isMacroUptrend) { 
-                confidence += 25; details.push("هاوڕێی نەهەنگەکان (Trend Alignment)"); 
-            } else if (rawSignalType === 'SELL' && !isMacroUptrend) { 
-                confidence += 25; details.push("هاوڕێی نەهەنگەکان (Trend Alignment)"); 
-            }
+            // زیادکردنی خاڵی متمانە بۆ گەیشتن بە ڕێژەی دەرچوون (Threshold)
+            if (rawSignalType === 'BUY' && stoch.k > stoch.d) { confidence += 20; details.push("تەقینەوەی مۆمێنتوم (Stoch Cross)"); }
+            if (rawSignalType === 'SELL' && stoch.k < stoch.d) { confidence += 20; details.push("داڕمانی مۆمێنتوم (Stoch Cross)"); }
+            
+            // قەبارەی مۆمەکە سەلامەت بێت (دوور بێت لە ژاوەژاو)
+            const bodySize = Math.abs(cOpen - cClose);
+            if (bodySize > atr * 0.3) { confidence += 15; details.push("قەبارەی مۆم گونجاوە"); }
 
-            // 4. فلتەری قەبارە (Smart Money Validation)
-            if (cVol > avgVol * 1.2) {
-                confidence += 15; details.push("قەبارەی پشتڕاستکراوە");
-            }
+            let stopLoss = rawSignalType === 'BUY' ? cClose - (atr * 1.5) : cClose + (atr * 1.5);
+            let takeProfit = rawSignalType === 'BUY' ? cClose + (atr * 2.0) : cClose - (atr * 2.0);
 
-            // 5. فلتەری سەلامەتی مۆمێنتوم (RSI & MACD)
-            const macdHist = calculateMACD(closes);
-            if (rawSignalType === 'BUY' && rsiValue < 65 && macdHist > 0) { confidence += 15; details.push("مۆمێنتومی ئەرێنی (MACD)"); }
-            else if (rawSignalType === 'SELL' && rsiValue > 35 && macdHist < 0) { confidence += 15; details.push("مۆمێنتومی نەرێنی (MACD)"); }
-
-            // 6. دیاریکردنی قازانج بە ڕێژەی (1:2 Risk Reward) - ئاستی پرۆفیشناڵ
-            let stopLoss = rawSignalType === 'BUY' ? cClose - (atr * 1.2) : cClose + (atr * 1.2);
-            let takeProfit = rawSignalType === 'BUY' ? cClose + (atr * 2.4) : cClose - (atr * 2.4);
-
-            if (confidence >= 80) {
+            // نزمکردنەوەی ئاستی وەرگرتن بۆ ٧٥٪ بۆ زامنکردنی (زۆرترین ئاماژە) بەڵام بە پشتگیری EMA 200 (کەمترین هەڵە)
+            if (confidence >= 75) {
                 return { type: rawSignalType, time: currentCandleTime, price: cClose.toFixed(digits), confidence: confidence, msg: details.join(" + "), sl: stopLoss.toFixed(digits), tp: takeProfit.toFixed(digits) };
             }
             
-            return { type: 'NEUTRAL', msg: `سیگناڵەکە ڕێژەی متمانەی کەمە بۆ بازرگانی پرۆفیشناڵ (%${confidence}).` };
+            return { type: 'NEUTRAL', msg: `سیگناڵەکە لە ژێر ئاستی دڵنیابوونەوەیە (%${confidence}).` };
         }
 
         function displayResult(signal, timeframe, assetName, digits) {
@@ -529,7 +521,7 @@
 
             let className = signal.type === 'BUY' ? "result-card buy" : "result-card sell";
             let barColor = signal.type === 'BUY' ? "#22c55e" : "#ef4444";
-            let header = signal.type === 'BUY' ? "🟢 ئاماژەی کڕین (Institutional BUY)" : "🔴 ئاماژەی فرۆشتن (Institutional SELL)";
+            let header = signal.type === 'BUY' ? "🟢 ئاماژەی کڕین خێرا (BUY)" : "🔴 ئاماژەی فرۆشتن خێرا (SELL)";
 
             resultDiv.className = className;
             resultDiv.innerHTML = `
@@ -537,12 +529,12 @@
                 <div class="info-row"><span>بازاڕ:</span> <b>${assetName}</b></div>
                 <div class="info-row"><span>نرخی جێبەجێکردن:</span> <b>${signal.price}</b></div>
                 <div class="target-box">
-                    <div class="target-row"><span>ئامانجی قازانج (RR 1:2):</span> <span style="color: #4ade80; font-weight: bold;">${signal.tp}</span></div>
+                    <div class="target-row"><span>ئامانجی قازانج:</span> <span style="color: #4ade80; font-weight: bold;">${signal.tp}</span></div>
                     <div class="target-row"><span>وەستانی زیان:</span> <span style="color: #f87171; font-weight: bold;">${signal.sl}</span></div>
                 </div>
                 <div style="margin-top: 15px; font-size: 13px;">متمانەی ئەلگۆریتم: <b>%${signal.confidence}</b></div>
                 <div class="confidence-container"><div class="confidence-bar" style="width: ${signal.confidence}%; background-color: ${barColor};"></div></div>
-                <div style="margin-top: 15px; font-size: 12px; color: #cbd5e1; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px;"><b>پشکنینی SMC:</b> ${signal.msg}</div>
+                <div style="margin-top: 15px; font-size: 12px; color: #cbd5e1; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px;"><b>پشکنینی هەلومەرج:</b> ${signal.msg}</div>
             `;
         }
     </script>
